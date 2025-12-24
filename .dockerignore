@@ -1,0 +1,40 @@
+# Git
+.git
+.gitignore
+
+# Build artifacts
+pip-cache
+*.exe
+*.dll
+*.so
+*.dylib
+
+# Test binary
+*.test
+
+# Cache
+cache/
+.cache/
+
+# IDE
+.idea
+.vscode
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+*.md
+!README.md
+
+# CI/CD
+.github
+
+# Development
+Makefile
+
+

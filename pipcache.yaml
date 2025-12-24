@@ -1,0 +1,34 @@
+server:
+  port: "8080"
+  host: "0.0.0.0"
+  mode: "release"
+
+cache:
+  dir: "/cache"  # 容器内缓存目录
+  max_size: 10737418240         # 10GB (生产环境大缓存)
+  # 测试300M
+  # max_size: 314572800
+  max_entries: 50000
+  simple_ttl: "10m"             # 稍长的缓存时间
+  packages_ttl: "87600h"        # ~10年
+  default_ttl: "2h"
+  watermark:
+    enabled: true
+    high: 0.90
+    low: 0.70
+
+upstream:
+  primary:
+    name: "tuna"
+    url: "https://pypi.tuna.tsinghua.edu.cn"
+    path_prefix: ""
+  fallback:
+    name: "aliyun"
+    url: "https://mirrors.aliyun.com"
+    path_prefix: "/pypi"
+  timeout: "30s"
+  large_file_timeout: "30m"  # 大文件下载超时时间（如torch等大包）
+
+log:
+  level: "debug"
+
