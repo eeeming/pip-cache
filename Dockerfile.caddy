@@ -1,0 +1,16 @@
+# 使用 xcaddy 构建带插件的 Caddy
+FROM caddy:builder AS builder
+
+# 安装 xcaddy
+RUN go install github.com/caddyserver/xcaddy/cmd/xcaddy@latest
+
+# 使用 xcaddy 构建带插件的 Caddy
+RUN xcaddy build \
+    --with github.com/caddy-dns/tencentcloud
+
+# 运行阶段
+FROM caddy:latest
+
+# 从构建阶段复制自定义构建的 Caddy 二进制文件
+COPY --from=builder /usr/bin/caddy /usr/bin/caddy
+
