@@ -108,6 +108,12 @@ func (h *Handler) handleHealth(w http.ResponseWriter, r *http.Request) {
 func (h *Handler) handleRedirect(w http.ResponseWriter, r *http.Request) bool {
 	path := r.URL.Path
 
+	// / -> /simple
+	if path == "/" {
+		http.Redirect(w, r, "/simple", http.StatusFound)
+		return true
+	}
+
 	// /simple -> /simple/
 	if path == "/simple" {
 		http.Redirect(w, r, "/simple/", http.StatusFound)

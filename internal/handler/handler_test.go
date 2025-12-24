@@ -187,6 +187,7 @@ func TestHandler_PathRedirect(t *testing.T) {
 		expectedCode int
 		expectedLoc  string
 	}{
+		{"/", http.StatusFound, "/simple"},
 		{"/simple", http.StatusFound, "/simple/"},
 		{"/simple/package", http.StatusFound, "/simple/package/"},
 		{"/simple/package/", http.StatusOK, ""},
