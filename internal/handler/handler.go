@@ -52,6 +52,12 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	// 处理 favicon.ico，直接返回 204 避免访问上游
+	if r.URL.Path == "/favicon.ico" {
+		w.WriteHeader(http.StatusNoContent)
+		return
+	}
+
 	// 处理路径重定向
 	if h.handleRedirect(w, r) {
 		return

@@ -179,6 +179,20 @@ func TestHandler_HealthCheck(t *testing.T) {
 	}
 }
 
+func TestHandler_Favicon(t *testing.T) {
+	handler, _, cleanup := setupTestHandler(t)
+	defer cleanup()
+
+	req := httptest.NewRequest("GET", "/favicon.ico", nil)
+	w := httptest.NewRecorder()
+
+	handler.ServeHTTP(w, req)
+
+	if w.Code != http.StatusNoContent {
+		t.Errorf("Expected status 204, got %d", w.Code)
+	}
+}
+
 func TestHandler_HelpPage(t *testing.T) {
 	handler, _, cleanup := setupTestHandler(t)
 	defer cleanup()
