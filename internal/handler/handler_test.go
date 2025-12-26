@@ -5,11 +5,12 @@ import (
 	"io"
 	"net/http"
 	"net/http/httptest"
+	"strings"
 	"testing"
 	"time"
 
-	"github.com/eeeming/pip-cache/internal/core"
 	"github.com/eeeming/pip-cache/internal/config"
+	"github.com/eeeming/pip-cache/internal/core"
 	"github.com/eeeming/pip-cache/internal/proxy"
 	"github.com/sirupsen/logrus"
 )
@@ -178,6 +179,32 @@ func TestHandler_HealthCheck(t *testing.T) {
 	}
 }
 
+func TestHandler_HelpPage(t *testing.T) {
+	handler, _, cleanup := setupTestHandler(t)
+	defer cleanup()
+
+	req := httptest.NewRequest("GET", "/", nil)
+	w := httptest.NewRecorder()
+
+	handler.ServeHTTP(w, req)
+
+	if w.Code != http.StatusOK {
+		t.Errorf("Expected status 200, got %d", w.Code)
+	}
+
+	if w.Header().Get("Content-Type") != "text/html; charset=utf-8" {
+		t.Errorf("Expected Content-Type text/html; charset=utf-8, got %s", w.Header().Get("Content-Type"))
+	}
+
+	body := w.Body.String()
+	if !strings.Contains(body, "Pip-cache") {
+		t.Error("Help page should contain 'Pip-cache'")
+	}
+	if !strings.Contains(body, "pip3 install") {
+		t.Error("Help page should contain pip installation instructions")
+	}
+}
+
 func TestHandler_PathRedirect(t *testing.T) {
 	handler, _, cleanup := setupTestHandler(t)
 	defer cleanup()
@@ -187,7 +214,6 @@ func TestHandler_PathRedirect(t *testing.T) {
 		expectedCode int
 		expectedLoc  string
 	}{
-		{"/", http.StatusFound, "/simple"},
 		{"/simple", http.StatusFound, "/simple/"},
 		{"/simple/package", http.StatusFound, "/simple/package/"},
 		{"/simple/package/", http.StatusOK, ""},
@@ -299,7 +325,7 @@ func TestHandler_StreamingWithClientDisconnect(t *testing.T) {
 	// 创建可取消的请求
 	ctx, cancel := context.WithCancel(context.Background())
 	req := httptest.NewRequest("GET", "/packages/large.whl", nil).WithContext(ctx)
-	
+
 	// 创建一个会在中途关闭的ResponseWriter
 	w := &closingResponseWriter{
 		ResponseRecorder: httptest.NewRecorder(),
@@ -339,4 +365,3 @@ func (w *closingResponseWriter) Write(data []byte) (int, error) {
 	}
 	return w.ResponseRecorder.Write(data)
 }
-

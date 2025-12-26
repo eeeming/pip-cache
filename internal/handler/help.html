@@ -1,0 +1,318 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="page-title">Pip-cache Help</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            max-width: 900px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #f5f5f5;
+        }
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #2c3e50;
+            border-bottom: 3px solid #3498db;
+            padding-bottom: 10px;
+        }
+
+        h2 {
+            color: #34495e;
+            margin-top: 30px;
+            margin-bottom: 15px;
+        }
+
+        h3 {
+            color: #555;
+            margin-top: 20px;
+            margin-bottom: 10px;
+        }
+
+        ul {
+            margin: 10px 0;
+            padding-left: 30px;
+        }
+
+        li {
+            margin: 8px 0;
+        }
+
+        code {
+            background-color: #f4f4f4;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-family: "Consolas", "Monaco", "Courier New", monospace;
+            font-size: 0.9em;
+        }
+
+        pre {
+            background-color: #2d2d2d;
+            color: #f8f8f2;
+            padding: 15px;
+            border-radius: 5px;
+            overflow-x: auto;
+            margin: 15px 0;
+        }
+
+        pre code {
+            background-color: transparent;
+            padding: 0;
+            color: inherit;
+        }
+
+        .note {
+            background-color: #fff3cd;
+            border-left: 4px solid #ffc107;
+            padding: 12px;
+            margin: 15px 0;
+            border-radius: 4px;
+        }
+
+        .code-block {
+            position: relative;
+            margin: 15px 0;
+        }
+
+        .code-block pre {
+            margin: 0;
+            padding-right: 50px;
+        }
+
+        .copy-btn {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            background-color: #3498db;
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: background-color 0.3s;
+        }
+
+        .copy-btn:hover {
+            background-color: #2980b9;
+        }
+
+        .copy-btn:active {
+            background-color: #21618c;
+        }
+
+        .copy-btn.copied {
+            background-color: #27ae60;
+        }
+
+        .footer {
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+            color: #666;
+            font-size: 14px;
+        }
+
+        .footer a {
+            color: #3498db;
+            text-decoration: none;
+        }
+
+        .footer a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Pip-cache</h1>
+        <p id="description">This service aims to solve issues such as slow PyPI connection speeds, servers unable to access external networks, and external network rate limits, providing an internal PyPI cache proxy service to improve Python package management efficiency.</p>
+
+        <h2 id="config-title">Configuration</h2>
+        <div class="note" id="current-address-note" style="display: none;">
+            <strong id="note-label">Tip:</strong> <span id="note-text">The following configurations are automatically generated based on the current access address</span>
+        </div>
+
+        <h3 id="pip-config-title">pip Configuration: Using -i parameter</h3>
+        <div id="pip-config-current-block" class="code-block" style="display: none;">
+            <button class="copy-btn" id="pip-copy-btn" onclick="copyToClipboard(this, 'pip-config-current-pre')">Copy</button>
+            <pre id="pip-config-current-pre"><code></code></pre>
+        </div>
+        
+        <div class="note">
+            <strong id="warning-label">Note:</strong> <span id="warning-text"></span>
+        </div>
+        
+        <h3 id="uv-config-title">uv Configuration: Add to pyproject.toml</h3>
+        <div id="uv-config-current-block" class="code-block" style="display: none;">
+            <button class="copy-btn" id="uv-copy-btn" onclick="copyToClipboard(this, 'uv-config-current-pre')">Copy</button>
+            <pre id="uv-config-current-pre"><code></code></pre>
+        </div>
+
+
+        <div class="footer">
+            <p><span id="footer-text">Open Source Project:</span> <a href="https://github.com/eeeming/pip-cache"
+                    target="_blank">https://github.com/eeeming/pip-cache</a></p>
+        </div>
+    </div>
+
+    <script>
+        // 多语言文本
+        const i18n = {
+            'zh-CN': {
+                title: 'Pip-cache 帮助',
+                description: '本服务旨在解决PyPI连接速度慢、服务器无法访问外网、外网速率限制等问题，提供内部PyPI缓存代理服务，提升Python包管理效率。',
+                configTitle: '配置',
+                noteLabel: '提示：',
+                noteText: '以下配置已根据当前访问地址自动生成',
+                pipConfigTitle: 'pip配置：使用 -i 参数',
+                uvConfigTitle: 'uv配置：在pyproject.toml中添加',
+                warningLabel: '注意：',
+                warningText: '对于非 HTTPS，必须加入 <code>--trusted-host</code> 参数',
+                footerText: '开源项目：',
+                copyBtn: '复制',
+                copied: '已复制',
+                copyFailed: '复制失败'
+            },
+            'en': {
+                title: 'Pip-cache Help',
+                description: 'This service aims to solve issues such as slow PyPI connection speeds, servers unable to access external networks, and external network rate limits, providing an internal PyPI cache proxy service to improve Python package management efficiency.',
+                configTitle: 'Configuration',
+                noteLabel: 'Tip:',
+                noteText: 'The following configurations are automatically generated based on the current access address',
+                pipConfigTitle: 'pip Configuration: Using -i parameter',
+                uvConfigTitle: 'uv Configuration: Add to pyproject.toml',
+                warningLabel: 'Note:',
+                warningText: 'For non-HTTPS, the <code>--trusted-host</code> parameter must be added',
+                footerText: 'Open Source Project:',
+                copyBtn: 'Copy',
+                copied: 'Copied',
+                copyFailed: 'Copy Failed'
+            }
+        };
+
+        // 检测语言
+        function detectLanguage() {
+            const browserLang = navigator.language || navigator.userLanguage;
+            const lang = browserLang.startsWith('zh') ? 'zh-CN' : 'en';
+            return lang;
+        }
+
+        // 设置语言
+        function setLanguage(lang) {
+            const texts = i18n[lang] || i18n['en'];
+            document.documentElement.lang = lang === 'zh-CN' ? 'zh-CN' : 'en';
+            document.getElementById('page-title').textContent = texts.title;
+            document.getElementById('description').textContent = texts.description;
+            document.getElementById('config-title').textContent = texts.configTitle;
+            document.getElementById('note-label').textContent = texts.noteLabel;
+            document.getElementById('note-text').textContent = texts.noteText;
+            document.getElementById('pip-config-title').textContent = texts.pipConfigTitle;
+            document.getElementById('uv-config-title').textContent = texts.uvConfigTitle;
+            document.getElementById('warning-label').textContent = texts.warningLabel;
+            const warningTextEl = document.getElementById('warning-text');
+            warningTextEl.innerHTML = texts.warningText;
+            document.getElementById('footer-text').textContent = texts.footerText;
+            
+            // 更新复制按钮
+            const pipCopyBtn = document.getElementById('pip-copy-btn');
+            const uvCopyBtn = document.getElementById('uv-copy-btn');
+            if (pipCopyBtn) pipCopyBtn.textContent = texts.copyBtn;
+            if (uvCopyBtn) uvCopyBtn.textContent = texts.copyBtn;
+            
+            // 保存当前语言状态
+            window.currentLang = lang;
+            window.currentTexts = texts;
+        }
+
+        // 根据当前访问地址生成配置
+        function generateConfig() {
+            const protocol = window.location.protocol.slice(0, -1);
+            const host = window.location.host;
+            const hostname = window.location.hostname;
+            const baseUrl = protocol + '://' + host + '/simple/';
+            const isHttps = protocol === 'https';
+
+            // 生成 pip 配置
+            let pipConfig = 'pip3 install requests -i ' + baseUrl;
+            if (!isHttps) {
+                pipConfig += ' --trusted-host ' + hostname;
+            }
+
+            // 生成 uv 配置
+            const uvConfig = `[[tool.uv.index]]
+name = "pip-cache"
+url = "${baseUrl}"
+default = true`;
+
+            // 更新页面
+            const pipConfigBlock = document.getElementById('pip-config-current-block');
+            const uvConfigBlock = document.getElementById('uv-config-current-block');
+            const pipCode = document.getElementById('pip-config-current-pre').querySelector('code');
+            const uvCode = document.getElementById('uv-config-current-pre').querySelector('code');
+            const noteElement = document.getElementById('current-address-note');
+
+            pipCode.textContent = pipConfig;
+            uvCode.textContent = uvConfig;
+
+            // 显示配置块和提示
+            pipConfigBlock.style.display = 'block';
+            uvConfigBlock.style.display = 'block';
+            noteElement.style.display = 'block';
+        }
+
+        // 初始化
+        function init() {
+            const lang = detectLanguage();
+            setLanguage(lang);
+            generateConfig();
+        }
+
+        // 页面加载时初始化
+        if (document.readyState === 'loading') {
+            document.addEventListener('DOMContentLoaded', init);
+        } else {
+            init();
+        }
+
+        function copyToClipboard(button, elementId) {
+            const pre = document.getElementById(elementId);
+            const code = pre.querySelector('code');
+            const text = code.textContent;
+            const texts = window.currentTexts || i18n['en'];
+
+            navigator.clipboard.writeText(text).then(function () {
+                const originalText = button.textContent;
+                button.textContent = texts.copied;
+                button.classList.add('copied');
+
+                setTimeout(function () {
+                    button.textContent = originalText;
+                    button.classList.remove('copied');
+                }, 2000);
+            }).catch(function (err) {
+                console.error('Copy failed:', err);
+                button.textContent = texts.copyFailed;
+                setTimeout(function () {
+                    button.textContent = texts.copyBtn;
+                }, 2000);
+            });
+        }
+    </script>
+</body>
+
+</html>

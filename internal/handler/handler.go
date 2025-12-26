@@ -2,6 +2,7 @@ package handler
 
 import (
 	"context"
+	_ "embed"
 	"fmt"
 	"io"
 	"net/http"
@@ -13,6 +14,9 @@ import (
 	"github.com/eeeming/pip-cache/internal/proxy"
 	"github.com/sirupsen/logrus"
 )
+
+//go:embed help.html
+var helpPageHTML string
 
 // Handler handles HTTP requests
 type Handler struct {
@@ -39,6 +43,12 @@ func (h *Handler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 	// 处理健康检查
 	if r.URL.Path == "/health" {
 		h.handleHealth(w, r)
+		return
+	}
+
+	// 处理帮助页面
+	if r.URL.Path == "/" {
+		h.handleHelp(w, r)
 		return
 	}
 
@@ -104,15 +114,16 @@ func (h *Handler) handleHealth(w http.ResponseWriter, r *http.Request) {
 	fmt.Fprintf(w, `{"status":"healthy","cache_size":%d}`, cacheSize)
 }
 
+// handleHelp handles the help page at root path
+func (h *Handler) handleHelp(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "text/html; charset=utf-8")
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w, helpPageHTML)
+}
+
 // handleRedirect handles path redirects
 func (h *Handler) handleRedirect(w http.ResponseWriter, r *http.Request) bool {
 	path := r.URL.Path
-
-	// / -> /simple
-	if path == "/" {
-		http.Redirect(w, r, "/simple", http.StatusFound)
-		return true
-	}
 
 	// /simple -> /simple/
 	if path == "/simple" {
